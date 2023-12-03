@@ -3,36 +3,36 @@ cmake_minimum_required(VERSION 3.12)
 set(PATCH_VERSION "1" CACHE INTERNAL "Patch version")
 set(PROJECT_VESRION 0.0.${PATCH_VERSION})
 
-project(ip_filter VERSION ${PROJECT_VESRION})
+project(allocator_task VERSION ${PROJECT_VESRION})
 
-add_executable(ip_filter ip_filter.cpp IpAdress.cpp IpAdress.h)
+add_executable(allocator_task main.cpp Allocator.h Container.h)
 
-set_target_properties(ip_filter ip_filter PROPERTIES
+set_target_properties(allocator_task allocator_task PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
 
-target_include_directories(ip_filter
+target_include_directories(allocator_task
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
 if (MSVC)
-    target_compile_options(ip_filter PRIVATE
+    target_compile_options(allocator_task PRIVATE
         /W4
     )
-    target_compile_options(ip_filter PRIVATE
+    target_compile_options(allocator_task PRIVATE
         /W4
     )
 else ()
-    target_compile_options(ip_filter PRIVATE
+    target_compile_options(allocator_task PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(ip_filter PRIVATE
+    target_compile_options(allocator_task PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
 endif()
 
-install(TARGETS ip_filter RUNTIME DESTINATION bin)
+install(TARGETS allocator_task RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
