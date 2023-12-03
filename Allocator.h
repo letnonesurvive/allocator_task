@@ -12,6 +12,10 @@ public:
 
     Allocator() = default;
 
+    explicit Allocator(size_t theMaxSize) : myMaxSize (theMaxSize) {}
+
+    template <class U>
+    Allocator(const Allocator<U>&) noexcept {}
 
     Type* allocate (size_t N)
     {
@@ -30,6 +34,16 @@ public:
         (void)N;
         std::free (thePointer);
     }
+
+    template<class U>
+    struct rebind
+    {
+        using other = Allocator<U>;
+    };
+
+   /* using propagate_on_container_copy_assignment = std::true_type;
+    using propagate_on_container_move_assignment = std::true_type;
+    using propagate_on_container_swap = std::true_type;*/
 
 private:
     size_t myMaxSize = 100;

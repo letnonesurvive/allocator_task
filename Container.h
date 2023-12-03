@@ -12,7 +12,7 @@ public:
         myBuf = std::allocator_traits<Allocator>::allocate (myAllocator, 1);
     }
 
-    container (size_t theLength) : mySize (0), myIteratorIndex (0)
+    explicit container (size_t theLength) : mySize (0), myIteratorIndex (0)
     {
         //myBuf = std::shared_ptr<Type[]>(new Type[theLength]);
 
@@ -22,13 +22,13 @@ public:
 
     void push_back (const Type& theValue)
     {
-        if (mySize == myCapacity) {
+        /*if (mySize == myCapacity) {
             myCapacity = myCapacity * 2 + 1;
             Type* aNewData = std::allocator_traits<Allocator>::allocate (myAllocator, myCapacity);
             std::copy (myBuf, myBuf + mySize * sizeof (Type), aNewData);
             std::swap (aNewData, myBuf);
             std::allocator_traits<Allocator>::deallocate (myAllocator, aNewData, myCapacity);
-        }
+        }*/
 
         std::allocator_traits<Allocator>::construct (myAllocator, myBuf + mySize, theValue);
         ++mySize;
