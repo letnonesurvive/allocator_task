@@ -7,17 +7,20 @@ class container
 {
 public:
 
-    container() : mySize (0), myIteratorIndex (0), myCapacity (0)
+    container()
     {
         myBuf = std::allocator_traits<Allocator>::allocate (myAllocator, 1);
     }
 
-    explicit container (size_t theLength) : mySize (0), myIteratorIndex (0)
+    explicit container (size_t theLength)
     {
-        //myBuf = std::shared_ptr<Type[]>(new Type[theLength]);
-
-        myCapacity = theLength * 2 + 1;
+        myCapacity = theLength;
         myBuf = std::allocator_traits<Allocator>::allocate (myAllocator, myCapacity);
+    }
+
+    explicit container (const Allocator& theAllocator) : myAllocator (theAllocator)
+    {
+        myBuf = std::allocator_traits<Allocator>::allocate (myAllocator, myAllocator.max_size());
     }
 
     void push_back (const Type& theValue)
@@ -60,12 +63,17 @@ public:
         return (mySize == 0);
     }
 
+    ~container()
+    {
+        std::allocator_traits<Allocator>::deallocate (myAllocator, myBuf, mySize);
+    }
+
 private:
 
-    Type* myBuf;
-    size_t mySize;
-    size_t myIteratorIndex;
-    size_t myCapacity;
+    Type* myBuf = nullptr;
+    size_t mySize = 0;
+    size_t myIteratorIndex = 0;
+    size_t myCapacity = 0;
 
     Allocator myAllocator;
 };

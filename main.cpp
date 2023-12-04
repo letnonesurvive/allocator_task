@@ -9,21 +9,6 @@ using namespace std;
 
 int main()
 { 
-    try {
-        container<int, Allocator<int>> aContainer;
-
-        aContainer.push_back(1);
-        aContainer.push_back(2);
-        aContainer.push_back(3);
-
-        while (aContainer.has_next()) {
-            cout << aContainer.next() << endl;
-        }
-
-    } catch (exception anException) {
-        cout << anException.what();
-    }
-
     map<int, int> aMap;
 
     for (int i = 0; i < 10; ++i) {
@@ -33,12 +18,14 @@ int main()
 
     cout << endl;
 
-    map<int, int, std::less<>, Allocator<pair<int, int>>> aMapWithNewAllocator (10);
+    map<int, int, std::less<>, Allocator<pair<int, int>>> aMapWithNewAllocator (Allocator<pair<int, int>>(10));
 
     for (int i = 0; i < 10; ++i) {
         aMapWithNewAllocator.insert (make_pair (i, static_cast<int> (tgamma (i+1))));
         cout << "i=" << i << " factorial=" << aMapWithNewAllocator[i] << endl;
     }
+
+    cout << endl;
 
     container<int> aContainer1 (10);
     for (int i = 0; i < 10; ++i) {
@@ -51,7 +38,7 @@ int main()
 
     cout << endl;
 
-    container<int, Allocator<int>> aContainer2(10);
+    container<int, Allocator<int>> aContainer2 (Allocator<int> (10));
     for (int i = 0; i < 10; ++i) {
         aContainer2.push_back (i);
     }
@@ -59,4 +46,5 @@ int main()
     for (int i = 0; aContainer2.has_next(); ++i) {
         cout << "aContainer2[" << i << "]=" << aContainer2.next() << endl;
     }
+
 }

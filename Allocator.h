@@ -29,10 +29,14 @@ public:
         throw std::bad_alloc();
     }
 
-    void deallocate (Type* thePointer, size_t N) noexcept
+    void deallocate (Type* thePointer, size_t) noexcept
     {
-        (void)N;
         std::free (thePointer);
+    }
+
+    size_t max_size() noexcept
+    {
+        return myMaxSize;
     }
 
     template<class U>
@@ -41,9 +45,9 @@ public:
         using other = Allocator<U>;
     };
 
-   /* using propagate_on_container_copy_assignment = std::true_type;
+    using propagate_on_container_copy_assignment = std::true_type;
     using propagate_on_container_move_assignment = std::true_type;
-    using propagate_on_container_swap = std::true_type;*/
+    using propagate_on_container_swap = std::true_type;
 
 private:
     size_t myMaxSize = 100;
