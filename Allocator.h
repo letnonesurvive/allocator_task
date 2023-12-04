@@ -20,7 +20,7 @@ public:
     Type* allocate (size_t N)
     {
         if (N > myMaxSize) {
-            throw std::exception ("The memory allocation limit for the number of items has been exceeded");
+            throw std::runtime_error ("The memory allocation limit for the number of items has been exceeded");
         }
 
         if (void* aPointer = std::malloc (N * sizeof (Type))) {
