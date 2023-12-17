@@ -9,6 +9,12 @@ using namespace std;
 
 int main()
 { 
+    /*std::allocator<int> alloc;
+    alloc.deallocate(void*);*/
+    //std::allocator<std::pair<int, int>> allocator;
+    //auto* myMemory = allocator.allocate(10);
+    //allocator.deallocate(myMemory, 10);
+
     map<int, int> aMap;
 
     for (int i = 0; i < 10; ++i) {
@@ -18,7 +24,7 @@ int main()
 
     cout << endl;
 
-    map<int, int, std::less<>, Allocator<pair<int, int>>> aMapWithNewAllocator (Allocator<pair<const int, int>> (10));
+    map<int, int, std::less<>, Allocator<pair<int, int>>> aMapWithNewAllocator (Allocator<pair<const int, int>> (11));
 
     for (int i = 0; i < 10; ++i) {
         aMapWithNewAllocator.insert (make_pair (i, static_cast<int> (tgamma (i+1))));
