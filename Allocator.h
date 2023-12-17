@@ -12,26 +12,33 @@ public:
 
     Allocator() = default;
 
-    explicit Allocator(size_t theMaxSize) : myMaxSize (theMaxSize) {}
+    explicit Allocator (size_t theMaxSize) : myMaxSize (theMaxSize) 
+    {
+        myPool = ::operator new (myMaxSize * sizeof (Type));
+        myCurrentPos = myPool;
+    }
 
     template <class U>
-    Allocator(const Allocator<U>&) noexcept {}
+    Allocator (const Allocator<U>& theAllocator) noexcept 
+    {
+        myPool = ::operator new (theAllocator.myMaxSize * sizeof (Type));
+        myMaxSize = theAllocator.myMaxSize;
+        myCurrentPos = myPool;
+    }
 
     Type* allocate (size_t N)
     {
-        if (N > myMaxSize) {
+        Type* aRes = static_cast<Type*> (myCurrentPos);
+        if (!isSpaceAvailable (N)) {
             throw std::runtime_error ("The memory allocation limit for the number of items has been exceeded");
         }
-
-        if (void* aPointer = std::malloc (N * sizeof (Type))) {
-            return static_cast<Type*> (aPointer);
-        }
-        throw std::bad_alloc();
+        myCurrentPos = static_cast<Type*>(myCurrentPos) + N;
+        return aRes;        
     }
 
     void deallocate (Type* thePointer, size_t) noexcept
     {
-        std::free (thePointer);
+        //std::free (myPool);
     }
 
     size_t max_size() noexcept
@@ -49,6 +56,22 @@ public:
     using propagate_on_container_move_assignment = std::true_type;
     using propagate_on_container_swap = std::true_type;
 
+    //~Allocator()
+    //{
+    //    //delete myPool;
+    //    //delete myCurrentPos
+    //}
+
 private:
-    size_t myMaxSize = 100;
+    bool isSpaceAvailable (size_t N)
+    {
+        Type* aWillBeAllocated = static_cast <Type*>(myCurrentPos) + N;
+        bool aRes = aWillBeAllocated <= static_cast <Type*>(myPool) + sizeof(Type) * max_size();
+        return aRes;
+    }
+
+public:
+    size_t myMaxSize;
+    void* myPool;
+    void* myCurrentPos;
 };

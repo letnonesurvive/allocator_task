@@ -18,7 +18,7 @@ int main()
 
     cout << endl;
 
-    map<int, int, std::less<>, Allocator<pair<int, int>>> aMapWithNewAllocator (Allocator<pair<int, int>>(10));
+    map<int, int, std::less<>, Allocator<pair<int, int>>> aMapWithNewAllocator (Allocator<pair<const int, int>> (10));
 
     for (int i = 0; i < 10; ++i) {
         aMapWithNewAllocator.insert (make_pair (i, static_cast<int> (tgamma (i+1))));
